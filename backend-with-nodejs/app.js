@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 
+const customersRoute = require('./routes/customerRoute');
+
+
 
 
 
@@ -21,6 +24,7 @@ mongoose.connect(`mongodb+srv://amro7275:${process.env.PASSWORD_DATABASE}@myclus
 
 server.use(express.json());
 
+server.use(customersRoute);
 
 
 
