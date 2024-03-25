@@ -6,8 +6,8 @@ const schema = new mongoose.Schema({
   password: { type: String },
   email: { type: String, unique: true },
   image: { type: String },
-
+  products: [{ type: Number, ref: "products" }]
 });
 
 
-module.exports = mongoose.model("admins", schema);
+module.exports = mongoose.model("sellres", schema);

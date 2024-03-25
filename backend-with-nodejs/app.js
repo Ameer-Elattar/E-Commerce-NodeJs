@@ -4,6 +4,7 @@ const dotenv = require("dotenv").config();
 const morgan = require('morgan');
 const cors = require('cors')
 const adminRouter = require("./routes/adminRouter");
+const sellerRouter = require("./routes/sellerRouter");
 
 
 
@@ -28,6 +29,7 @@ mongoose.connect(`mongodb+srv://amro7275:${process.env.PASSWORD_DATABASE}@myclus
 
 server.use(express.json());
 server.use(adminRouter);
+server.use(sellerRouter);
 
 
 

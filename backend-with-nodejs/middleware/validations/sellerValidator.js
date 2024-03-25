@@ -1,5 +1,5 @@
 const { body, param, query } = require("express-validator");
-const adminSchema = require("./../../model/adminSchema");
+const sellerSchema = require("./../../model/sellerSchema");
 exports.insertValidator = [
   body("_id")
     .isInt()
@@ -9,7 +9,7 @@ exports.insertValidator = [
     .withMessage("admin fullname should be string")
     .isLength({ min: 3 })
     .withMessage(" admin fullname lenght>5").custom(async (value) => {
-      const objects = await adminSchema.find({ fullname: value });
+      const objects = await sellerSchema.find({ fullname: value });
       if (objects.length > 0) {
         return Promise.reject("this fullname  already exists");
       }
@@ -21,7 +21,7 @@ exports.insertValidator = [
     .withMessage(" admin fullname lenght>5"),
   body("email").isEmail()
     .withMessage("invalid mail").custom(async (value) => {
-      const objects = await adminSchema.find({ email: value });
+      const objects = await sellerSchema.find({ email: value });
       if (objects.length > 0) {
         return Promise.reject("email already exists");
       }
@@ -30,6 +30,17 @@ exports.insertValidator = [
 
   body("image").isString()
     .withMessage("invalid mail").withMessage("admin image should be string"),
+  body("products").isArray()
+    .withMessage("seller products should be Array").custom((value) => {
+
+      for (let i = 0; i < value.length; i++) {
+        if (typeof (value[i]) != "number") {
+
+          throw new Error("seller products should contain only integers");
+        }
+      }
+      return true;
+    }),
 
 ];
 
@@ -43,9 +54,9 @@ exports.updateValidator = [
     .withMessage("admin fullname should be string")
     .isLength({ min: 5 })
     .withMessage(" admin fullname lenght>5").custom(async (value) => {
-      const objects = await adminSchema.find({ fullname: value });
+      const objects = await sellerSchema.find({ fullname: value });
       if (objects.length > 0) {
-        return Promise.reject(" this fullname already exists");
+        return Promise.reject("this fullname  already exists");
       }
       return true;
     }),
@@ -53,12 +64,9 @@ exports.updateValidator = [
     .withMessage("admin password should be string")
     .isLength({ min: 5 })
     .withMessage(" admin fullname lenght>5"),
-  body("email")
-    .isEmail()
-    .optional()
-    .withMessage("invalid email")
-    .custom(async (value) => {
-      const objects = await adminSchema.find({ email: value });
+  body("email").isEmail().optional()
+    .withMessage("invalid mail").custom(async (value) => {
+      const objects = await sellerSchema.find({ email: value });
       if (objects.length > 0) {
         return Promise.reject("email already exists");
       }
@@ -67,6 +75,17 @@ exports.updateValidator = [
 
   body("image").isString().optional()
     .withMessage("invalid mail").withMessage("admin image should be string"),
+  body("products").optional().isArray()
+    .withMessage("seller products should be Array").custom((value) => {
+
+      for (let i = 0; i < value.length; i++) {
+        if (typeof (value[i]) != "number") {
+
+          throw new Error("seller products should contain only integers");
+        }
+      }
+      return true;
+    }),
 
 
 ];
