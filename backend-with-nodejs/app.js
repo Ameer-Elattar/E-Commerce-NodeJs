@@ -25,6 +25,7 @@ mongoose
 server.use(express.json());
 server.use(adminRouter);
 server.use(sellerRouter);
+server.use(customersRoute);
 
 server.use((request, response) => {
   response.status(404).json({ data: "Not Found" });
