@@ -1,6 +1,8 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
+
+const customersRoute = require("./routes/customerRoute");
 const adminRouter = require("./routes/adminRouter");
 const sellerRouter = require("./routes/sellerRouter");
 const productRouter = require("./routes/productRoute");
@@ -25,6 +27,7 @@ server.use(express.json());
 server.use(adminRouter);
 server.use(sellerRouter);
 server.use(productRouter);
+server.use(customersRoute);
 
 server.use((request, response) => {
   response.status(404).json({ data: "Not Found" });
