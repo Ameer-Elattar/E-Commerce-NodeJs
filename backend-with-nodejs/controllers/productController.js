@@ -2,7 +2,7 @@ const productSchema = require("../model/productSchema");
 
 exports.getAllProducts = (req, res, next) => {
   productSchema
-    .find()
+    .find({})
     .then((data) => {
       res.status(200).json({ data: data });
     })
@@ -44,10 +44,9 @@ exports.deleteProductByID = (req, res, next) => {
 };
 exports.getProductsByCategory = (req, res, next) => {
   productSchema
-    .findById(req.params.category)
-    .then((object) => {
-      if (!object) throw new Error("Product doesn't exist");
-      res.status(200).json({ object });
+    .find({ category: req.params.category })
+    .then((data) => {
+      res.status(200).json(data);
     })
     .catch((error) => next(error));
 };

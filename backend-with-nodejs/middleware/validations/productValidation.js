@@ -1,7 +1,7 @@
 const { body, param } = require("express-validator");
 
 exports.insertValidator = [
-  body("_id").isInt().withMessage("Product ID must be an Number"),
+  //body("_id").isInt().withMessage("Product ID must be an Number"),
   body("name")
     .isString()
     .withMessage("product name is should be a string")
@@ -13,17 +13,24 @@ exports.insertValidator = [
   body("rating")
     .isInt({ min: 0, max: 5 })
     .withMessage("product rating should be Number"),
-  body("category").isObject().withMessage("category should be an object"),
-  body("category._id")
-    .isInt() // TODO: check if it exist in DB
-    .withMessage("referenced category id shpuld be Number"),
-  body("category.name")
-    .isAlpha("en-US", { ignore: " " }) // TODO: check if it exist in DB
+  body("category")
+    .isAlpha("en-US", { ignore: " " })
     .withMessage("category name sould be string"),
   body("sellerID").isInt().withMessage("seller ID should be an Number"), // check if it exit in DB
   body("productDescription")
-    .isObject()
-    .withMessage("product description is an object"),
+    .isArray()
+    .withMessage("product description is an Array"),
+  body("productDescription.*")
+    .isString()
+    .withMessage("productDescription values is String "),
+  body("reviews")
+    .optional()
+    .isArray()
+    .withMessage("product description is an Array"),
+  body("reviews.*")
+    .optional()
+    .isString()
+    .withMessage("reviews values is String "),
 ];
 exports.updateValidator = [
   body("_id").isInt().withMessage("Product ID must be an Number"),
@@ -36,7 +43,7 @@ exports.updateValidator = [
   body("image").optional().isString().withMessage("image is String"),
   body("price")
     .optional()
-    .isInt()
+    .isDecimal()
     .withMessage("product price should be Number"),
   body("stock")
     .optional()
@@ -48,13 +55,7 @@ exports.updateValidator = [
     .withMessage("product rating should be Number"),
   body("category")
     .optional()
-    .isObject()
-    .withMessage("category should be an object"),
-  body("category._id")
-    .isInt() // TODO: check if it exist in DB
-    .withMessage("referenced category id shpuld be Number"),
-  body("category.name")
-    .isAlpha("en-US", { ignore: " " }) // TODO: check if it exist in DB
+    .isAlpha("en-US", { ignore: " " })
     .withMessage("category name sould be string"),
   body("sellerID")
     .optional()
@@ -62,6 +63,18 @@ exports.updateValidator = [
     .withMessage("seller ID should be an Number"), // check if it exit in DB
   body("productDescription")
     .optional()
-    .isObject()
+    .isArray()
     .withMessage("product description is an object"),
+  body("productDescription.*")
+    .optional()
+    .isString()
+    .withMessage("productDescription values is String "),
+  body("reviews")
+    .optional()
+    .isArray()
+    .withMessage("product description is an Array"),
+  body("reviews.*")
+    .optional()
+    .isString()
+    .withMessage("reviews values is String "),
 ];

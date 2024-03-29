@@ -4,11 +4,11 @@ const validator = require("../middleware/validations/productValidation");
 const validationResult = require("../middleware/validations/validatorResult");
 const router = express.Router();
 
+router.route("/product/category").get(controller.getProductsByCategory);
 router
   .route("/product/:id")
   .get(controller.getProductByID)
   .delete(controller.deleteProductByID);
-router.route("/product/category").get(controller.getProductsByCategory);
 router
   .route("/product")
   .get(controller.getAllProducts)

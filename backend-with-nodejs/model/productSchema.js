@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-
+const autoIncrement = require("mongoose-sequence")(moongose);
 const schema = new mongoose.Schema({
   _id: Number,
   name: String,
@@ -7,31 +7,11 @@ const schema = new mongoose.Schema({
   price: Number,
   stock: Number,
   rating: Number,
+  category: String,
   sellerID: { type: Number, ref: "seller" },
-  category: { _id: { type: Number, ref: "category" }, name: String },
+  productDescription: [String],
   reviews: [String],
-  // objdescription: {
-  //   storage: 55,
-  //   company: "samsung",
-  // }
 });
 
+schema.plugin(autoIncrement, { id: "productID" });
 module.exports = mongoose.model("products", schema);
-
-/*
-id: 1,
-    name: "iphone",
-    img: "photo.jpg",
-    price: 1000,
-    stock: 20,
-    rating: 4,
-    category: {
-      _id: "ref",
-      name: "categoryname",
-    },
-    reviews: [],
-    sellerID: 1,
-    objdescription: {
-      storage: 55,
-      company: "samsung",
-    },*/
