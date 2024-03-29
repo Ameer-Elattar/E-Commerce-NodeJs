@@ -8,13 +8,13 @@ const schemaCustomer = new mongoose.Schema({
     lastName : String,
     email : {type : String, unique: true},
     password : {type : String, select : false},
-    phone : {type: Number, unique: true},
+    phone : {type: String, unique: true},
     address : String,
     img : String,
     balance : Number,
     orders:[{
-        _id : Number,
-        date : Date,
+        _id : {type : Number, unique: true},
+        date : {type : Date, default: Date.now},
         total : Number,
         status : String,
         products : [{
