@@ -1,5 +1,5 @@
 <template>
-  <headerbar></headerbar>
+  <headerbar/>
   <RouterView></RouterView>
 
 </template>
