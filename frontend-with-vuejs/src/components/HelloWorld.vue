@@ -29,11 +29,17 @@
 </template>
 
 <script>
+
+import {storedata} from './../storedata.js'
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
-  }
+  },
+  data:()=>({
+    storedata:storedata()
+  })
 }
 </script>
 
