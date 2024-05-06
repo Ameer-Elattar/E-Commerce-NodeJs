@@ -1,13 +1,12 @@
-const { body, param } = require("express-validator");
+const { body } = require("express-validator");
 
 exports.insertValidator = [
-  //body("_id").isInt().withMessage("Product ID must be an Number"),
   body("name")
     .isString()
     .withMessage("product name is should be a string")
     .isLength({ min: 3 })
     .withMessage("product name should be descriptive"),
-  body("image").isString().withMessage("image is String"),
+  // body("image").isString().withMessage("image is String"),
   body("price").isDecimal().withMessage("product price should be Number"),
   body("stock").isInt().withMessage("product stock should be Number"),
   body("rating")

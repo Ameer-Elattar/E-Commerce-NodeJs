@@ -23,7 +23,10 @@ mongoose
     console.log(err);
   });
 
+server.use(express.static('public'))
 server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
+
 server.use(adminRouter);
 server.use(sellerRouter);
 server.use(productRouter);
