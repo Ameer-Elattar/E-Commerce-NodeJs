@@ -1,6 +1,6 @@
 const productSchema = require("../model/productSchema");
 const multer = require("multer");
-const FS = require("fs");
+const fs = require("fs");
 const storage = multer.memoryStorage();
 
 exports.upload = multer({ storage: storage });
@@ -30,7 +30,7 @@ exports.insertProduct = (req, res, next) => {
   object
     .save()
     .then((data) => {
-      FS.writeFile(
+      fs.writeFile(
         `public/products/${object.image}`,
         req.file.buffer,
         (err) => {
@@ -45,10 +45,19 @@ exports.insertProduct = (req, res, next) => {
 };
 
 exports.updateProduct = (req, res, next) => {
+  req.body.image = `${Date.now()}-${Math.random()}-${req.file.originalname}`;
   productSchema
-    .updateMany({ _id: req.body._id }, { $set: req.body })
-    .then(() => {
-      res.status(200).json("Records updated successfully");
+    .findByIdAndUpdate(req.body._id, req.body)
+    .then((object) => {
+      if (!object) throw new Error("product doesb't exist");
+      fs.writeFile(
+        `public/products/${req.body.image}`,
+        req.file.buffer,
+        (err) => {
+          if (err) return next(err);
+          res.status(200).json({ msg: "Records updated successfully", object });
+        }
+      );
     })
     .catch((error) => next(error));
 };

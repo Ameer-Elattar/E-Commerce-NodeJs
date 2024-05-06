@@ -4,7 +4,9 @@ const validator = require("../middleware/validations/productValidation");
 const validationResult = require("../middleware/validations/validatorResult");
 const router = express.Router();
 
-router.route("/product/category/:category").get(controller.getProductsByCategory);
+router
+  .route("/product/category/:category")
+  .get(controller.getProductsByCategory);
 
 router
   .route("/product")
@@ -15,7 +17,12 @@ router
     validationResult,
     controller.insertProduct
   )
-  .patch(validator.updateValidator, validationResult, controller.updateProduct);
+  .patch(
+    controller.upload.single("image"),
+    validator.updateValidator,
+    validationResult,
+    controller.updateProduct
+  );
 
 router
   .route("/product/:id")
@@ -25,7 +32,7 @@ module.exports = router;
 //
 /**
  * TODO:
- * 
+ *
  * authentication and autherization
  *
  */

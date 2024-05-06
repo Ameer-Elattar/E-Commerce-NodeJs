@@ -2,9 +2,6 @@ const { body, param, query } = require("express-validator");
 const adminSchema = require("./../../model/adminSchema");
 const sellerSchema = require("./../../model/sellerSchema");
 exports.insertValidator = [
-  body("_id")
-    .isInt()
-    .withMessage("admin id should be int"),
   body("fullname")
     .isAlpha()
     .withMessage("admin fullname should be string")
@@ -21,8 +18,7 @@ exports.insertValidator = [
     }),
   body("password").isString()
     .withMessage("admin password should be string")
-    .isLength({ min: 5 })
-    .withMessage(" admin fullname lenght>5"),
+    .isLength({ min: 5 }),
   body("email").isEmail()
     .withMessage("invalid mail").custom(async (value) => {
       const adminObjects = await adminSchema.find({ email: value });
@@ -35,8 +31,6 @@ exports.insertValidator = [
       return true;
     }),
 
-  body("image").isString()
-    .withMessage("invalid mail").withMessage("admin image should be string"),
 
 ];
 
