@@ -17,7 +17,6 @@ exports.insertValidator = [
       "i"
     )
     .withMessage("invalid password"),
-  ,
   body("email")
     .isEmail()
     .withMessage("invalid mail")
