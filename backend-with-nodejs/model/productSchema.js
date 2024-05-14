@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
   stock: Number,
   rating: Number,
   category: String,
-  sellerID: { type: Number, ref: "seller" },
+  sellerID: { type: Number, ref: "sellres" },
   productDescription: [String],
   reviews: [String],
 });

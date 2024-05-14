@@ -34,5 +34,5 @@ module.exports = router;
  * TODO:
  *
  * authentication and autherization
- *
+ *  TODO: validate the image
  */

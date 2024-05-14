@@ -1,23 +1,29 @@
-const express = require('express');
-const customersController = require('./../controllers/customersController');
-const customersValidator = require('./../middleware/validations/customersValidator');
-const validatorResult = require('./../middleware/validations/validatorResult');
-
-
+const express = require("express");
+const controller = require("./../controllers/customersController");
+const validator = require("./../middleware/validations/customersValidator");
+const validatorResult = require("./../middleware/validations/validatorResult");
 
 const router = express.Router();
 
+router
+  .route("/customers")
+  .get(controller.getAllCustomers)
+  .post(
+    controller.upload.single("image"),
+    validator.insert,
+    validatorResult,
+    controller.insert
+  )
+  .patch(
+    controller.upload.single("image"),
+    validator.update,
+    validatorResult,
+    controller.update
+  );
 
+router
+  .route("/customers/:id")
+  .get(controller.getCustomerById)
+  .delete(controller.deleteCustomerById);
 
-router.route('/customers')
-        .get(customersController.getAllCustomers)
-        .post(customersValidator.insert,validatorResult,customersController.insert)
-        .patch(customersValidator.update,validatorResult,customersController.update);
-
-router.route('/customers/:id')
-        .get(customersController.getCustomerById)
-        .delete(customersController.deleteCustomerById);
-
-       
-
-module.exports=router;
+module.exports = router;

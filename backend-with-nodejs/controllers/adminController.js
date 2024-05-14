@@ -22,6 +22,10 @@ exports.getAdminById = (req, res, next) => {
 };
 exports.insertAdmin = (req, res, next) => {
   let object = new adminSchema(req.body);
+  const imageType = req.file.mimetype.split("/")[1];
+  if (imageType !== "png" && imageType !== "jpg" && imageType !== "jpeg") {
+    throw new Error("Invalid image type. Supported types are: png, jpg, jpeg");
+  }
   object.image = `${Date.now()}-${Math.random()}-${req.file.originalname}`;
   object
     .save()
@@ -36,10 +40,20 @@ exports.insertAdmin = (req, res, next) => {
 
 exports.updateAdmin = (req, res, next) => {
   const { password, ...updatedBody } = req.body;
+  const imageType = req.file.mimetype.split("/")[1];
+  if (imageType !== "png" && imageType !== "jpg" && imageType !== "jpeg") {
+    throw new Error("Invalid image type. Supported types are: png, jpg, jpeg");
+  }
   updatedBody.image = `${Date.now()}-${Math.random()}-${req.file.originalname}`;
   adminSchema
-    .findByIdAndUpdate(req.body._id, req.body, { new: true })
-    .then((data) => {
+    .findByIdAndUpdate(req.body._id, req.body)
+    .then((object) => {
+      if (!object) throw new Error("customer doesn't exist");
+      const imagePath = `public/seller/${object.image}`;
+      fs.unlink(imagePath, (err) => {
+        if (err) {
+        }
+      });
       fs.writeFile(
         `public/admin/${updatedBody.image}`,
         req.file.buffer,
@@ -48,7 +62,7 @@ exports.updateAdmin = (req, res, next) => {
 
           res
             .status(200)
-            .json({ message: "data updated except password", data });
+            .json({ message: "data updated except password", object });
         }
       );
     })

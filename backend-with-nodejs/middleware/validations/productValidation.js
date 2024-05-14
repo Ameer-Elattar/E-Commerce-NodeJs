@@ -1,4 +1,5 @@
 const { body } = require("express-validator");
+const sellerSchema = require("../../model/sellerSchema");
 
 exports.insertValidator = [
   body("name")
@@ -6,7 +7,6 @@ exports.insertValidator = [
     .withMessage("product name is should be a string")
     .isLength({ min: 3 })
     .withMessage("product name should be descriptive"),
-  // body("image").isString().withMessage("image is String"),
   body("price").isDecimal().withMessage("product price should be Number"),
   body("stock").isInt().withMessage("product stock should be Number"),
   body("rating")
@@ -15,7 +15,17 @@ exports.insertValidator = [
   body("category")
     .isAlpha("en-US", { ignore: " " })
     .withMessage("category name sould be string"),
-  body("sellerID").isInt().withMessage("seller ID should be an Number"), // check if it exit in DB
+  body("sellerID")
+    .isInt()
+    .withMessage("seller ID should be an Number")
+    .custom((value) => {
+      return sellerSchema
+        .find(value)
+        .then((object) => {
+          if (!object) throw new Error("seller doesn't exists");
+        })
+        .catch((err) => next(err));
+    }),
   body("productDescription")
     .isArray()
     .withMessage("product description is an Array"),
@@ -39,7 +49,6 @@ exports.updateValidator = [
     .withMessage("product name is should be a string")
     .isLength({ min: 3 })
     .withMessage("product name should be descriptive"),
-  body("image").optional().isString().withMessage("image is String"),
   body("price")
     .optional()
     .isDecimal()
@@ -59,7 +68,15 @@ exports.updateValidator = [
   body("sellerID")
     .optional()
     .isInt()
-    .withMessage("seller ID should be an Number"), // check if it exit in DB
+    .withMessage("seller ID should be an Number")
+    .custom((value) => {
+      return sellerSchema
+        .find(value)
+        .then((object) => {
+          if (!object) throw new Error("seller doesn't exists");
+        })
+        .catch((err) => next(err));
+    }),
   body("productDescription")
     .optional()
     .isArray()

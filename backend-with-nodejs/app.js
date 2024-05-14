@@ -1,11 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const morgan = require("morgan");
 const dotenv = require("dotenv").config();
 
 const customersRoute = require("./routes/customerRoute");
 const adminRouter = require("./routes/adminRouter");
 const sellerRouter = require("./routes/sellerRouter");
 const productRouter = require("./routes/productRoute");
+const orderRouter = require("./routes/orderRoute");
 const server = express();
 const port = process.env.PORT || 4444;
 
@@ -23,12 +25,14 @@ mongoose
     console.log(err);
   });
 
-server.use(express.static('public'))
+server.use(morgan('dev'));
+server.use(express.static("public"));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
 server.use(adminRouter);
 server.use(sellerRouter);
+server.use(orderRouter);
 server.use(productRouter);
 server.use(customersRoute);
 
