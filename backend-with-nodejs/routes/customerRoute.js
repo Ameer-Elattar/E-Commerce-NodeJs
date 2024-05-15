@@ -2,19 +2,25 @@ const express = require("express");
 const controller = require("./../controllers/customersController");
 const validator = require("./../middleware/validations/customersValidator");
 const validatorResult = require("./../middleware/validations/validatorResult");
+const {
+  isAdmin,
+  isAdminOrcustomer,
+} = require("../middleware/validations/authorizationMW");
 
 const router = express.Router();
 
 router
   .route("/customers")
-  .get(controller.getAllCustomers)
+  .get(isAdmin, controller.getAllCustomers)
   .post(
+    isAdmin,
     controller.upload.single("image"),
     validator.insert,
     validatorResult,
     controller.insert
   )
   .patch(
+    isAdminOrcustomer,
     controller.upload.single("image"),
     validator.update,
     validatorResult,
@@ -23,7 +29,7 @@ router
 
 router
   .route("/customers/:id")
-  .get(controller.getCustomerById)
-  .delete(controller.deleteCustomerById);
+  .get(isAdmin, controller.getCustomerById)
+  .delete(isAdmin, controller.deleteCustomerById);
 
 module.exports = router;

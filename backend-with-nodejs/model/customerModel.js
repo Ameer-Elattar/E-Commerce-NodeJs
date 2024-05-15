@@ -7,7 +7,7 @@ const schemaCustomer = new mongoose.Schema({
   firstName: String,
   lastName: String,
   email: { type: String, unique: true },
-  password: { type: String, select: false },
+  password: { type: String },
   phone: { type: String, unique: true },
   address: String,
   image: String,

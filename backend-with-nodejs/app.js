@@ -8,6 +8,10 @@ const adminRouter = require("./routes/adminRouter");
 const sellerRouter = require("./routes/sellerRouter");
 const productRouter = require("./routes/productRoute");
 const orderRouter = require("./routes/orderRoute");
+const loginRouter = require("./routes/loginRouter");
+const resgiterRoute = require("./routes/registerRoute");
+const autherizationMW = require("./middleware/validations/authorizationMW");
+
 const server = express();
 const port = process.env.PORT || 4444;
 
@@ -25,11 +29,14 @@ mongoose
     console.log(err);
   });
 
-server.use(morgan('dev'));
+server.use(morgan("dev"));
 server.use(express.static("public"));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
+server.use(resgiterRoute);
+server.use(loginRouter);
+server.use(autherizationMW);
 server.use(adminRouter);
 server.use(sellerRouter);
 server.use(orderRouter);

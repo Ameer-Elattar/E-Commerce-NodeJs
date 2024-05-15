@@ -2,6 +2,10 @@ const express = require("express");
 const controller = require("../controllers/productController");
 const validator = require("../middleware/validations/productValidation");
 const validationResult = require("../middleware/validations/validatorResult");
+const {
+  isAdmin,
+  isAdminOrSeller,
+} = require("../middleware/validations/authorizationMW");
 const router = express.Router();
 
 router
@@ -12,12 +16,14 @@ router
   .route("/product")
   .get(controller.getAllProducts)
   .post(
+    isAdminOrSeller,
     controller.upload.single("image"),
     validator.insertValidator,
     validationResult,
     controller.insertProduct
   )
   .patch(
+    isAdminOrSeller,
     controller.upload.single("image"),
     validator.updateValidator,
     validationResult,
@@ -27,12 +33,5 @@ router
 router
   .route("/product/:id")
   .get(controller.getProductByID)
-  .delete(controller.deleteProductByID);
+  .delete(isAdminOrSeller, controller.deleteProductByID);
 module.exports = router;
-//
-/**
- * TODO:
- *
- * authentication and autherization
- *  TODO: validate the image
- */

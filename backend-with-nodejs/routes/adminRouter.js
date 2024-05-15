@@ -5,19 +5,22 @@ const {
   updateValidator,
   deleteGetOneValidator,
 } = require("./../middleware/validations/adminValidator");
+const { isAdmin } = require("../middleware/validations/authorizationMW");
 const validatonResult = require("../middleware/validations/validatorResult");
 const router = express.Router();
 
 router
   .route("/admins")
-  .get(controller.getAllAdmins)
+  .get(isAdmin, controller.getAllAdmins)
   .post(
+    isAdmin,
     controller.upload.single("image"),
     insertValidator,
     validatonResult,
     controller.insertAdmin
   )
   .patch(
+    isAdmin,
     controller.upload.single("image"),
     updateValidator,
     validatonResult,
@@ -26,6 +29,11 @@ router
 
 router
   .route("/admins/:_id")
-  .get(deleteGetOneValidator, validatonResult, controller.getAdminById)
-  .delete(deleteGetOneValidator, validatonResult, controller.deleteAdminById);
+  .get(isAdmin, deleteGetOneValidator, validatonResult, controller.getAdminById)
+  .delete(
+    isAdmin,
+    deleteGetOneValidator,
+    validatonResult,
+    controller.deleteAdminById
+  );
 module.exports = router;
